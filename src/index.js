@@ -46,16 +46,16 @@ Notify.info("Too many matches found. Please enter a more specific name.")
 }
      
 function createMarkupOne({ name: { official }, capital, population, flags: { svg }, languages }) { 
-    console.log(capital);
+
     const markupOne = `
+
      <li style ="display: contents" class="country-item">
         <img src="${svg}" alt="official" width = "50"></li>
       <li style ="display: contents" class="country-item">${official}</li>
       <li class="country-item"><span class="span">Capital</span>: ${capital}</li>
       <li class="country-item"><span class="span">Population</span>: ${population}</li>
       
-    <li class="country-item"><span class="span">Languages</span>: ${languages}</li>
-
+    <li class="country-item"><span class="span">Languages</span>: ${Object.values(languages).join(", ")}</li>
         `
           return refUl.innerHTML = markupOne
     }

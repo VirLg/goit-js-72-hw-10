@@ -8,7 +8,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #fafafa;
-
+  background-image: url(../img/106394637-abstract-many-lines-and-points-background-geometry-wallpaper-vector-design-connection-concept.webp);
+  background-size: cover;
   color: #212121;
   line-height: 1.5;
 }
@@ -18,6 +19,10 @@ body {
   padding: 8px;
   max-width: 320px;
   margin-bottom: 16px;
+}
+#search-box:hover,
+#search-box:focus {
+  outline: 2px solid slateblue;
 }
 .country-list {
   list-style: none;
