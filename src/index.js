@@ -1,4 +1,6 @@
 import './css/styles.css';
+import debounce from 'lodash.debounce';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 const DEBOUNCE_DELAY = 300;
 const BEST_URL = 'https://restcountries.com/v3.1/'
@@ -7,15 +9,17 @@ let arrCountry = [];
 const refCartDiv = document.querySelector('.country-info')
 const refInput = document.querySelector('#search-box')
 const refUl = document.querySelector('.country-list')
-refInput.addEventListener('input', handleCountry)
+refInput.addEventListener('input', debounce(handleCountry,DEBOUNCE_DELAY))
 // const refBTN = document.querySelector('.js-country')
 // refBTN.addEventListener('click', handleCountry)
 
 function handleCountry(evt) {
-    return fetch(`${BEST_URL}name/${refInput.value}`)
+  
+    return fetch(`${BEST_URL}name/${refInput.value}`) 
         .then((resp) => {
             
             if (!resp.ok) {
+                Notify.failure("Oops, there is no country with that name")
                 throw new Error(resp.statusText)
             }  
          return dataAPI(resp.json())
@@ -23,97 +27,53 @@ function handleCountry(evt) {
         })  
 }
 
-
 function dataAPI(resp) { 
     resp.then(data => { 
         // return console.log(data.splice(10));
         arrCountry = [...data]
         if (arrCountry.length > 30) {
-            console.log("uuuuuPPPPss")
-        }else if (arrCountry.length < 19) {
+Notify.info("Too many matches found. Please enter a more specific name.")
+        }else if (arrCountry.length < 19&&arrCountry.length > 1) {
                    arrCountry.splice(10); 
-                createMarkupMany(arrCountry)
+            createMarkupMany(arrCountry)
+            refUl.classList.add('group')
         } else if (arrCountry.length === 1) {
+            refUl.classList.remove('group')
          createMarkupOne(arrCountry[0])   
-         }
-        // if (arrCountry.length >= 1) {
-        //     const firstEl = arrCountry[0]
-        //     console.log(arrCountry[0]);
-        //    return createMarkupOne(firstEl)
-        
-     
-        
+         }   
     })  
 
 }
      
 function createMarkupOne({ name: { official }, capital, population, flags: { svg }, languages }) { 
-     const  markupOne =   `
-    <li class="country-item">${official}</li>
-      <li class="country-item">${capital}</li>
-      <li class="country-item">${population}</li>
-      <li class="country-item">
-      <img src="${ svg }" alt="official" width = 200px></li>
-      <li class="country-item">${languages}</li>
+    console.log(capital);
+    const markupOne = `
+     <li style ="display: contents" class="country-item">
+        <img src="${svg}" alt="official" width = "50"></li>
+      <li style ="display: contents" class="country-item">${official}</li>
+      <li class="country-item"><span class="span">Capital</span>: ${capital}</li>
+      <li class="country-item"><span class="span">Population</span>: ${population}</li>
+      
+    <li class="country-item"><span class="span">Languages</span>: ${languages}</li>
+
         `
           return refUl.innerHTML = markupOne
-
     }
 
 function createMarkupMany(arrCountry) {
-    console.log(arrCountry);
-    const markupMany = arrCountry.map(({ flags: { svg }, name: { official } }) =>    
-     `<li class="country-item">
-    <img src="${ svg }" alt="official" width = 50px></li>
-    <li class="country-item">${official}</li>
+ 
+    const markupMany = arrCountry.map(({ flags: { svg }, name: { official } }) =>
+        `<li class="country-item js-many">
+    <img src="${svg}" alt="official" width = "50"></li>
+    <li class="country-item js-many">${official}</li>
         `
-    )
-
-
-
-refUl.innerHTML = markupMany;
-console.log(arrCountry);
-
+    );
+refUl.innerHTML = markupMany.join('');
 }   
     
  
 
-// // {name.official,
-// //  capital,
-// //  population,
-// //  flags,
-// //  languages }
 
-
-
-
-// // fetch(createEndPoind()).then((responce) => {
-// //     return responce.json()
-// // })
-// //     .then((country) => {
-// //         console.log(country);
-        
-// //     })
-// //     .catch((error) => { console.log(error); })
-
-
-
-
-
-
-
-
-
-
-
-
-    // прапор, назва, столиця, населення і мови
-
-// name.official - повна назва країни
-// capital - столиця
-// population - населення
-// flags.svg - посилання на зображення прапора
-// languages - масив мов
 
 
 // ==================================================
