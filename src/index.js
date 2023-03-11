@@ -14,8 +14,14 @@ refInput.addEventListener('input', debounce(handleCountry,DEBOUNCE_DELAY))
 // refBTN.addEventListener('click', handleCountry)
 
 function handleCountry(evt) {
-  
-    return fetch(`${BEST_URL}name/${refInput.value}`) 
+    const checkValue= evt.target.value.trim()
+    if (checkValue === '') {
+        Notify.warning("Empty value")
+        console.log('!!!!!!!');
+        return
+    } else {
+        return fetch(`${BEST_URL}name/${checkValue}`) 
+        
         .then((resp) => {
             
             if (!resp.ok) {
@@ -25,6 +31,7 @@ function handleCountry(evt) {
          return dataAPI(resp.json())
 
         })  
+     
 }
 
 function dataAPI(resp) { 
