@@ -17,29 +17,31 @@ refInput.addEventListener('input', debounce(handleCountry,DEBOUNCE_DELAY))
 // refBTN.addEventListener('click', handleCountry)
 
 function handleCountry(evt) {
-    const checkValue= evt.target.value.trim()
+    const checkValue = evt.target.value.trim()
     if (!checkValue) {
         Notify.warning("Empty value")
         console.log('!!!!!!!');
         return
     }
-        API.fetchCountrys(checkValue).then(data => {
-        // return console.log(data.splice(10));
-        arrCountry = [...data]
-        if (arrCountry.length > 10) {
-Notify.info("Too many matches found. Please enter a more specific name.")
-        }else if (arrCountry.length <= 10&&arrCountry.length > 1) {
-                   arrCountry.splice(10); 
-            createMarkupMany(arrCountry)
-            refUl.classList.add('group')
-        } else if (arrCountry.length === 1) {
-            refUl.classList.remove('group')
-         createMarkupOne(arrCountry[0])   
-         }   
-    })  
+    API.fetchCountrys(checkValue).then(data => {
+    
 
-}
-     
+                // return console.log(data.splice(10));
+                arrCountry = [...data]
+                if (arrCountry.length > 10) {
+        Notify.info("Too many matches found. Please enter a more specific name.")
+                }else if (arrCountry.length <= 10&&arrCountry.length > 1) {
+                           arrCountry.length = 10; 
+                    createMarkupMany(arrCountry)
+                    refUl.classList.add('group')
+                } else if (arrCountry.length === 1) {
+                    refUl.classList.remove('group')
+                 createMarkupOne(arrCountry[0])   
+                 }   
+            })  
+
+
+} 
 function createMarkupOne({ name: { official }, capital, population, flags: { svg }, languages }) { 
 
     const markupOne = `
