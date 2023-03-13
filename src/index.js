@@ -24,9 +24,6 @@ function handleCountry(evt) {
         return
     }
     API.fetchCountrys(checkValue).then(data => {
-    
-
-                // return console.log(data.splice(10));
                 arrCountry = [...data]
                 if (arrCountry.length > 10) {
         Notify.info("Too many matches found. Please enter a more specific name.")
@@ -45,60 +42,24 @@ function handleCountry(evt) {
 function createMarkupOne({ name: { official }, capital, population, flags: { svg }, languages }) { 
 
     const markupOne = `
-     <li style ="display: contents" class="country-item">
-        <img src="${svg}" alt="official" width = "50"></li>
-      <li style ="display: contents" class="country-item">${official}</li>
-      <li class="country-item"><span class="span">Capital</span>: ${capital}</li>
-      <li class="country-item"><span class="span">Population</span>: ${population}</li>
-      
-    <li class="country-item"><span class="span">Languages</span>: ${Object.values(languages).join(", ")}</li>
+        <li style ="display: contents" class="country-item">
+            <img src="${svg}" alt="official" width = "50"></li>
+        <li style ="display: contents" class="country-item">${official}</li>
+        <li class="country-item"><span class="span">Capital</span>: ${capital}</li>
+        <li class="country-item"><span class="span">Population</span>: ${population}</li>
+        <li class="country-item"><span class="span">Languages</span>: ${Object.values(languages).join(", ")}</li>
         `
           return refUl.innerHTML = markupOne
     }
 
 function createMarkupMany(arrCountry) {
  
-    const markupMany = arrCountry.map(({ flags: { svg }, name: { official } }) =>
-        `<li class="country-item js-many">
-    <img src="${svg}" alt="official" width = "50"></li>
-    <li class="country-item js-many">${official}</li>
-        `
-    );
-refUl.innerHTML = markupMany.join('');
+    const markupMany = arrCountry.map(({ flags: { svg }, name: { official } }) =>`
+        <li class="country-item js-many">
+        <img src="${svg}" alt="official" width = "50"></li>
+        <li class="country-item js-many">${official}</li>`);
+          refUl.innerHTML = markupMany.join('');
 }   
     
  
 
-
-//  ==================================================
-
-// // key 9837a04f7ff64382a06141028230803
-
-// const request = fetch('http://api.weatherapi.com/v1/forecast.json?key=9837a04f7ff64382a06141028230803&q=Kiev&days=5')
-
-
-// request.then(resp =>resp.json()).then(data=>console.log(data))
-
-// const refForm = document.querySelector('.js-serch')
-// refForm.addEventListener('submit', wheatherSerch)
-
-// function wheatherSerch(evt) { 
-//     evt.preventDefault()
-//     const { query, days } = evt.currentTarget
-    
-//     weatherApi(query.value, days.value).then((data) => { console.log(data)}).catch(err=>console.log('err'))
-// }
-
-// function weatherApi(city,days) { 
-// const BEST_URL = 'http://api.weatherapi.com/v1';
-//  const key = '9837a04f7ff64382a06141028230803'
-//     return fetch(`${BEST_URL}/forecast.json?key=${key}&q=${city}&days=${days}`)
-//         .then((resp) => {
-            
-//             if (!resp.ok) {
-//                 throw new Error(resp.statusText)
-//             }
-
-//         return resp.json()
-//          })
-// }
