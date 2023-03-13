@@ -1,9 +1,12 @@
+
+
 import './css/styles.css';
 import debounce from 'lodash.debounce';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import API from './js/api-service'
 
 const DEBOUNCE_DELAY = 300;
-const BEST_URL = 'https://restcountries.com/v3.1/'
+// const BEST_URL = 'https://restcountries.com/v3.1/'
 let arrCountry = [];
 
 const refCartDiv = document.querySelector('.country-info')
@@ -20,70 +23,65 @@ function handleCountry(evt) {
         console.log('!!!!!!!');
         return
     } else {
-        return fetch(`${BEST_URL}name/${checkValue}`) 
-        
-        .then((resp) => {
-            
-            if (!resp.ok) {
-                Notify.failure("Oops, there is no country with that name")
-                throw new Error(resp.statusText)
-            }  
-         return dataAPI(resp.json())
-
-        })  
-     
+        return API.fetchCountrys(checkValue)    
+    }          
 }
 
-function dataAPI(resp) { 
-    resp.then(data => { 
-        // return console.log(data.splice(10));
-        arrCountry = [...data]
-        if (arrCountry.length > 30) {
-Notify.info("Too many matches found. Please enter a more specific name.")
-        }else if (arrCountry.length < 19&&arrCountry.length > 1) {
-                   arrCountry.splice(10); 
-            createMarkupMany(arrCountry)
-            refUl.classList.add('group')
-        } else if (arrCountry.length === 1) {
-            refUl.classList.remove('group')
-         createMarkupOne(arrCountry[0])   
-         }   
-    })  
 
+
+function dataAPI() { 
+ const a = API.fetchCountrys()
+console.log(a);   
 }
+dataAPI()
+
+// function dataAPI(resp) { 
+//     resp.then(data => { 
+//         // return console.log(data.splice(10));
+//         arrCountry = [...data]
+//         if (arrCountry.length > 30) {
+// Notify.info("Too many matches found. Please enter a more specific name.")
+//         }else if (arrCountry.length < 19&&arrCountry.length > 1) {
+//                    arrCountry.splice(10); 
+//             createMarkupMany(arrCountry)
+//             refUl.classList.add('group')
+//         } else if (arrCountry.length === 1) {
+//             refUl.classList.remove('group')
+//          createMarkupOne(arrCountry[0])   
+//          }   
+//     })  
+
+// }
      
-function createMarkupOne({ name: { official }, capital, population, flags: { svg }, languages }) { 
+// function createMarkupOne({ name: { official }, capital, population, flags: { svg }, languages }) { 
 
-    const markupOne = `
-
-     <li style ="display: contents" class="country-item">
-        <img src="${svg}" alt="official" width = "50"></li>
-      <li style ="display: contents" class="country-item">${official}</li>
-      <li class="country-item"><span class="span">Capital</span>: ${capital}</li>
-      <li class="country-item"><span class="span">Population</span>: ${population}</li>
+//     const markupOne = `
+//      <li style ="display: contents" class="country-item">
+//         <img src="${svg}" alt="official" width = "50"></li>
+//       <li style ="display: contents" class="country-item">${official}</li>
+//       <li class="country-item"><span class="span">Capital</span>: ${capital}</li>
+//       <li class="country-item"><span class="span">Population</span>: ${population}</li>
       
-    <li class="country-item"><span class="span">Languages</span>: ${Object.values(languages).join(", ")}</li>
-        `
-          return refUl.innerHTML = markupOne
-    }
+//     <li class="country-item"><span class="span">Languages</span>: ${Object.values(languages).join(", ")}</li>
+//         `
+//           return refUl.innerHTML = markupOne
+//     }
 
-function createMarkupMany(arrCountry) {
+// function createMarkupMany(arrCountry) {
  
-    const markupMany = arrCountry.map(({ flags: { svg }, name: { official } }) =>
-        `<li class="country-item js-many">
-    <img src="${svg}" alt="official" width = "50"></li>
-    <li class="country-item js-many">${official}</li>
-        `
-    );
-refUl.innerHTML = markupMany.join('');
-}   
+//     const markupMany = arrCountry.map(({ flags: { svg }, name: { official } }) =>
+//         `<li class="country-item js-many">
+//     <img src="${svg}" alt="official" width = "50"></li>
+//     <li class="country-item js-many">${official}</li>
+//         `
+//     );
+// refUl.innerHTML = markupMany.join('');
+// }   
     
  
 
 
-
-
-// ==================================================
+//  ==================================================
 
 // // key 9837a04f7ff64382a06141028230803
 
