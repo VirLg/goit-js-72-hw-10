@@ -21,12 +21,14 @@ function handleCountry(evt) {
     if (!checkValue) {
         Notify.warning("Empty value")
         console.log('!!!!!!!');
+        
         return
     }
     API.fetchCountrys(checkValue).then(data => {
                 arrCountry = [...data]
                 if (arrCountry.length > 10) {
-        Notify.info("Too many matches found. Please enter a more specific name.")
+                    Notify.info("Too many matches found. Please enter a more specific name.")
+                 refUl.innerHTML = ''   
                 }else if (arrCountry.length <= 10&&arrCountry.length > 1) {
                            arrCountry.length = 10; 
                     createMarkupMany(arrCountry)
