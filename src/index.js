@@ -18,65 +18,52 @@ refInput.addEventListener('input', debounce(handleCountry,DEBOUNCE_DELAY))
 
 function handleCountry(evt) {
     const checkValue= evt.target.value.trim()
-    if (checkValue === '') {
+    if (!checkValue) {
         Notify.warning("Empty value")
         console.log('!!!!!!!');
         return
-    } else {
-        return API.fetchCountrys(checkValue)    
-    }          
+    }
+        API.fetchCountrys(checkValue).then(data => {
+        // return console.log(data.splice(10));
+        arrCountry = [...data]
+        if (arrCountry.length > 10) {
+Notify.info("Too many matches found. Please enter a more specific name.")
+        }else if (arrCountry.length <= 10&&arrCountry.length > 1) {
+                   arrCountry.splice(10); 
+            createMarkupMany(arrCountry)
+            refUl.classList.add('group')
+        } else if (arrCountry.length === 1) {
+            refUl.classList.remove('group')
+         createMarkupOne(arrCountry[0])   
+         }   
+    })  
+
 }
-
-
-
-function dataAPI() { 
- const a = API.fetchCountrys()
-console.log(a);   
-}
-dataAPI()
-
-// function dataAPI(resp) { 
-//     resp.then(data => { 
-//         // return console.log(data.splice(10));
-//         arrCountry = [...data]
-//         if (arrCountry.length > 30) {
-// Notify.info("Too many matches found. Please enter a more specific name.")
-//         }else if (arrCountry.length < 19&&arrCountry.length > 1) {
-//                    arrCountry.splice(10); 
-//             createMarkupMany(arrCountry)
-//             refUl.classList.add('group')
-//         } else if (arrCountry.length === 1) {
-//             refUl.classList.remove('group')
-//          createMarkupOne(arrCountry[0])   
-//          }   
-//     })  
-
-// }
      
-// function createMarkupOne({ name: { official }, capital, population, flags: { svg }, languages }) { 
+function createMarkupOne({ name: { official }, capital, population, flags: { svg }, languages }) { 
 
-//     const markupOne = `
-//      <li style ="display: contents" class="country-item">
-//         <img src="${svg}" alt="official" width = "50"></li>
-//       <li style ="display: contents" class="country-item">${official}</li>
-//       <li class="country-item"><span class="span">Capital</span>: ${capital}</li>
-//       <li class="country-item"><span class="span">Population</span>: ${population}</li>
+    const markupOne = `
+     <li style ="display: contents" class="country-item">
+        <img src="${svg}" alt="official" width = "50"></li>
+      <li style ="display: contents" class="country-item">${official}</li>
+      <li class="country-item"><span class="span">Capital</span>: ${capital}</li>
+      <li class="country-item"><span class="span">Population</span>: ${population}</li>
       
-//     <li class="country-item"><span class="span">Languages</span>: ${Object.values(languages).join(", ")}</li>
-//         `
-//           return refUl.innerHTML = markupOne
-//     }
+    <li class="country-item"><span class="span">Languages</span>: ${Object.values(languages).join(", ")}</li>
+        `
+          return refUl.innerHTML = markupOne
+    }
 
-// function createMarkupMany(arrCountry) {
+function createMarkupMany(arrCountry) {
  
-//     const markupMany = arrCountry.map(({ flags: { svg }, name: { official } }) =>
-//         `<li class="country-item js-many">
-//     <img src="${svg}" alt="official" width = "50"></li>
-//     <li class="country-item js-many">${official}</li>
-//         `
-//     );
-// refUl.innerHTML = markupMany.join('');
-// }   
+    const markupMany = arrCountry.map(({ flags: { svg }, name: { official } }) =>
+        `<li class="country-item js-many">
+    <img src="${svg}" alt="official" width = "50"></li>
+    <li class="country-item js-many">${official}</li>
+        `
+    );
+refUl.innerHTML = markupMany.join('');
+}   
     
  
 

@@ -6,14 +6,15 @@ function fetchCountrys(checkValue) {
 
     return fetch(`${BEST_URL}name/${checkValue}`).then((resp) => {
             
-        // if (!resp.ok) {
-        //     Notify.failure("Oops, there is no country with that name")
-        //     throw new Error(resp.statusText)
-        // }
-       
+        if (!resp.ok) {
+            Notify.failure("Oops, there is no country with that name")
+            throw new Error(resp.statusText)
+        }
+      
         return resp.json();
     })
 
 }
+
 
 export default {fetchCountrys}
